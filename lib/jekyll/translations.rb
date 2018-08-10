@@ -1,5 +1,3 @@
-require "jekyll/translations/version"
-
 module Jekyll
     require 'json'
     require 'open-uri'
@@ -78,6 +76,6 @@ module Jekyll
             end
         end
     end
-end
 
-Liquid::Template.register_filter(Translations::TranslateFilter)
+    Liquid::Template.register_filter(Translations::TranslateFilter)
+end
