@@ -5,9 +5,10 @@ module Jekyll
     module Translations
         class Generator < Jekyll::Generator
             def generate(site)
-                translation_source = site.config['translations']['source']
+                translation_sources = site.config['translations']['sources']
 
-                site.data['translations'] = JSON.parse(open(translation_source).read)
+                site.data['translations'] = {}
+                translation_sources.each { |key, value| site.data['translations'][key] = JSON.parse(open(value).read) }
             end
         end
 
@@ -17,7 +18,7 @@ module Jekyll
             @skipTranslationCheck = nil
             @debug_translations = false
 
-            def translations
+            def translations(locale)
                 return @translations if @translations
 
                 site = @context.registers[:site]
@@ -25,7 +26,7 @@ module Jekyll
                 @skipTranslationCheck = config['skipTranslationCheck']
                 @debug_translations = !@skipTranslationCheck and ENV['DEBUG_TRANSLATIONS'].to_i === 1
 
-                translation_data = site.data['translations']
+                translation_data = site.data['translations'][locale]
                 translations = translation_data['common']
 
                 if config['context'] and translation_data[config['context']]
@@ -46,7 +47,10 @@ module Jekyll
                 # If we've an array, translate each item and return
                 return self.translate_array(text) if text.kind_of?(Array)
 
-                @translations = self.translations
+                page = @context.environments.first['page']
+                locale = page['locale'] ? page['locale'] : 'default'
+
+                @translations = self.translations(locale)
 
                 # Uncomment the following block to see a list of items missing translations
                 # if @translations[text].nil?
