@@ -1,8 +1,8 @@
 Gem::Specification.new do |spec|
   spec.name          = "jekyll-translations"
   spec.version       = "2.0.0"
-  spec.authors       = ["Jeff Martin"]
-  spec.email         = ["jeff.martin@researchsquare.com"]
+  spec.authors       = ["Research Square Comapny Engineering"]
+  spec.email         = ["customer@researchsquare.com"]
   spec.require_paths = ["lib"]
   spec.summary       = %q{Translation tool for Jekyll}
   spec.homepage      = "https://github.com/researchsquare/jekyll-translations"
