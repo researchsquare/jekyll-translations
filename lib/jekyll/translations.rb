@@ -16,6 +16,7 @@ module Jekyll
             @translations = []
             @localizationContext = nil
             @skipTranslationCheck = nil
+            @showTerm = false
             @debug_translations = false
 
             def translations(locale)
@@ -24,6 +25,7 @@ module Jekyll
                 site = @context.registers[:site]
                 config = site.config['translations']
                 @skipTranslationCheck = config['skipTranslationCheck']
+                @showTerm = !!config['showTerms']
                 @debug_translations = !@skipTranslationCheck and ENV['DEBUG_TRANSLATIONS'].to_i === 1
 
                 translation_data = site.data['translations'][locale]
@@ -41,6 +43,28 @@ module Jekyll
                 array.each { |item| translated_hash[item] = self.t(item) }
 
                 return translated_hash
+            end
+
+            def show_translation_term(translation, tag)
+                if @showTerm && !@showTermOverride
+                    return "<#{tag} title=\"#{@lastTerm}\">#{translation}</#{tag}>"
+                end
+
+                return translation
+            end
+
+            def tns(text, args = [])
+                @showTermOverride = true;
+
+                translated = self.t(text, args)
+                
+                @showTermOverride = false;
+
+                return translated
+            end
+
+            def ts(translation)
+                return self.show_translation_term(translation, 'div')
             end
 
             def t(text, args = [])
@@ -75,8 +99,15 @@ module Jekyll
                     args = args.to_s
                 end
 
-                return (@translations[text] % args) if not args.empty?
-                return @translations[text]
+                if not args.empty?
+                    translated = (@translations[text] % args)
+                else
+                    translated = @translations[text]
+                end
+
+                @lastTerm = text
+
+                return self.show_translation_term(translated, 'span')
             end
         end
     end
