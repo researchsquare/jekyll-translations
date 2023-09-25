@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   release-please:
-    runs-on: [self-hosted, linux, non-gpu]
+    runs-on: [ubuntu-latest]
     if: false
 
     steps:
@@ -28,7 +28,7 @@ jobs:
       release_created: ${{ steps.release.outputs.release_created }}
       
   publish-gem:
-    runs-on: [self-hosted, linux, non-gpu]
+    runs-on: [ubuntu-latest]
     # needs: [release-please]
     # if: ${{ needs.release-please.outputs.release_created }}
 
