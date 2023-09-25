@@ -1,6 +1,6 @@
 Gem::Specification.new do |spec|
   spec.name          = "jekyll-translations"
-  spec.version       = "2.0.0"
+  spec.version       = File.read(File.expand_path('../VERSION', __FILE__)).strip
   spec.authors       = ["Research Square Comapny Engineering"]
   spec.email         = ["customer@researchsquare.com"]
   spec.require_paths = ["lib"]
