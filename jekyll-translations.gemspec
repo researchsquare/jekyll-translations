@@ -1,7 +1,11 @@
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require 'jekyll/version'
+
 Gem::Specification.new do |spec|
   spec.name          = "jekyll-translations"
-  spec.version       = File.read(File.expand_path('../VERSION', __FILE__)).strip
-  spec.authors       = ["Research Square Comapny Engineering"]
+  spec.version       = Jekyll::Translations::VERSION
+  spec.authors       = ["Research Square Company Engineering"]
   spec.email         = ["customer@researchsquare.com"]
   spec.require_paths = ["lib"]
   spec.summary       = %q{Translation tool for Jekyll}

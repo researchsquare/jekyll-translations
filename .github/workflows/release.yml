@@ -15,17 +15,17 @@ jobs:
 
     steps:
       - name: Release Please
-        uses: GoogleCloudPlatform/release-please-action@v2
+        uses: GoogleCloudPlatform/release-please-action@v3
         id: release
         with:
           release-type: ruby
           package-name: jekyll-translations
           bump-minor-pre-major: true
-          version-file: "VERSION"
+          version-file: "lib/jekyll/version.rb"
 
     outputs:
       release_created: ${{ steps.release.outputs.release_created }}
-      
+
   publish-gem:
     runs-on: [ubuntu-latest]
     needs: [release-please]
