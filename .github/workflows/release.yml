@@ -2,35 +2,14 @@ name: release
 
 on:
   push:
-#    branches:
-#      - main
 
 permissions:
   contents: write
   pull-requests: write
 
 jobs:
-  release-please:
-    runs-on: [self-hosted, linux, non-gpu]
-    if: false
-
-    steps:
-      - name: Release Please
-        uses: GoogleCloudPlatform/release-please-action@v2
-        id: release
-        with:
-          release-type: ruby
-          package-name: jekyll-translations
-          bump-minor-pre-major: true
-          version-file: "VERSION"
-
-    outputs:
-      release_created: ${{ steps.release.outputs.release_created }}
-      
   publish-gem:
     runs-on: [self-hosted, linux, non-gpu]
-    # needs: [release-please]
-    # if: ${{ needs.release-please.outputs.release_created }}
 
     steps:
       - name: Checkout
