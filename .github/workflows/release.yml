@@ -1,0 +1,56 @@
+name: release
+
+on:
+  push:
+#    branches:
+#      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: [self-hosted, linux, non-gpu]
+    if: false
+
+    steps:
+      - name: Release Please
+        uses: GoogleCloudPlatform/release-please-action@v2
+        id: release
+        with:
+          release-type: ruby
+          package-name: jekyll-translations
+          bump-minor-pre-major: true
+          version-file: "VERSION"
+
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+      
+  publish-gem:
+    runs-on: [self-hosted, linux, non-gpu]
+    # needs: [release-please]
+    # if: ${{ needs.release-please.outputs.release_created }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.0.0
+      
+      - name: Install the bundle
+        run: bundle install
+
+      - name: publish gem
+        env:
+          GEM_HOST_API_KEY: "${{secrets.RUBYGEMS_AUTH_TOKEN}}"
+        run: |
+          mkdir -p $HOME/.gem
+          touch $HOME/.gem/credentials
+          chmod 0600 $HOME/.gem/credentials
+          printf -- "---\n:rubygems_api_key: ${GEM_HOST_API_KEY}\n" > $HOME/.gem/credentials
+          gem build *.gemspec
+          cat jekyll-translations.gemspec
